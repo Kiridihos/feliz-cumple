@@ -5,14 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎉 ¡Feliz Cumple Yura! 🎂</title>
     <style>
-        body { text-align: center; font-family: Arial, sans-serif; background-color: #ffcccb; }
-        h1 { color: #ff4081; font-size: 3rem; }
-        p { font-size: 1.5rem; color: #333; }
+        /* Estilos generales */
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: black;
+            color: white;
+            overflow: hidden;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        h1 {
+            color: #ff4081;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            z-index: 10;
+        }
+
+        p {
+            font-size: 1.5rem;
+            max-width: 80%;
+            z-index: 10;
+        }
+
+        img {
+            width: 80%;
+            max-width: 300px;
+            border-radius: 10px;
+            z-index: 10;
+        }
+
+        /* Fondo de estrellas */
+        .stars-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        /* Animación de parpadeo */
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        /* Responsividad */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="stars-container"></div>
     <h1>🎉 ¡Feliz Cumple Yura! 🎂</h1>
     <p>Espero que tengas un día increíble lleno de alegría y felicidad.</p>
     <img src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" alt="Feliz cumpleaños">
+
+    <script>
+        // Generar estrellas aleatorias
+        function createStars() {
+            const container = document.querySelector(".stars-container");
+            const numStars = 100; // Cantidad de estrellas
+
+            for (let i = 0; i < numStars; i++) {
+                let star = document.createElement("div");
+                star.className = "star";
+                star.style.top = Math.random() * 100 + "vh";
+                star.style.left = Math.random() * 100 + "vw";
+                star.style.animationDuration = (Math.random() * 2 + 1) + "s"; // Variar la velocidad
+                container.appendChild(star);
+            }
+        }
+
+        createStars();
+    </script>
 </body>
 </html>
