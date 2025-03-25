@@ -62,14 +62,39 @@
             animation: twinkle 3s infinite ease-in-out;
         }
 
-        /* Animación de parpadeo */
         @keyframes twinkle {
             0% { opacity: 0; transform: scale(0.5); }
             50% { opacity: 1; transform: scale(1.2); }
             100% { opacity: 0; transform: scale(0.5); }
         }
 
-        /* Responsividad */
+        /* Botones */
+        .button-container {
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .button {
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Ocultar el iframe de YouTube */
+        #youtube-player {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+        }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 2rem;
@@ -77,6 +102,11 @@
 
             p {
                 font-size: 1.2rem;
+            }
+
+            .button {
+                font-size: 0.9rem;
+                padding: 10px 15px;
             }
         }
     </style>
@@ -87,7 +117,19 @@
     <p>Espero que tengas un día increíble lleno de alegría y felicidad.</p>
     <img src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" alt="Feliz cumpleaños">
 
+    <!-- Contenedor de botones -->
+    <div class="button-container">
+        <button id="playButton" class="button">Reproducir Música 🎶</button>
+        <button id="muteButton" class="button">🔇 Silenciar</button>
+    </div>
+
+    <!-- Iframe oculto con el video de YouTube -->
+    <div id="youtube-player"></div>
+
     <script>
+        let player;
+        let isMuted = false;
+
         // Generar estrellas aleatorias
         function createStars() {
             const container = document.querySelector(".stars-container");
@@ -104,6 +146,70 @@
         }
 
         createStars();
+
+        // Cargar la API de YouTube
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: 'nJHbQEbP79w', // ID del video de YouTube (puedes cambiarlo)
+                playerVars: {
+                    autoplay: 1,
+                    loop: 1,
+                    playlist: 'nJHbQEbP79w', // Necesario para hacer el loop
+                    controls: 0,
+                    showinfo: 0,
+                    modestbranding: 1,
+                    fs: 0,
+                    disablekb: 1
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+            muteButton.style.display = "block"; // Mostrar botón de mute
+        }
+
+        let muteButton = document.getElementById("muteButton");
+        let playButton = document.getElementById("playButton");
+
+        // Intentar reproducir automáticamente
+        window.onload = function () {
+            playButton.style.display = "block";
+        };
+
+        // Función para iniciar la música manualmente
+        playButton.addEventListener("click", function () {
+            if (player) {
+                player.playVideo();
+            }
+            this.style.display = "none";
+        });
+
+        // Función para silenciar o activar el audio
+        muteButton.addEventListener("click", function () {
+            if (player) {
+                if (isMuted) {
+                    player.unMute();
+                    muteButton.textContent = "🔇 Silenciar";
+                    isMuted = false;
+                } else {
+                    player.mute();
+                    muteButton.textContent = "🔊 Activar Sonido";
+                    isMuted = true;
+                }
+            }
+        });
+
+        // Cargar la API de YouTube de manera dinámica
+        let tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        let firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     </script>
 </body>
 </html>
